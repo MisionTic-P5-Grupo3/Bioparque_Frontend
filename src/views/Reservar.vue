@@ -1,7 +1,7 @@
 <template>
   <div class="reservar">
     <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
-    <form v-on:submit.prevent="agregarReserva" class="form">
+    <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
       <div>
         <label>Tipo de Documento</label>
         <select v-model="reservaData.tipo_documento" type="text">
@@ -21,7 +21,7 @@
       <div>
         <label>Número de Telefono</label>
         <input
-          v-model="reservaData.telefono" type="number" placeholder="Escribe tu número de contacto" />
+          v-model="reservaData.telefono" type="text" placeholder="Escribe tu número de contacto" />
       </div>
       <div>
         <label>Correo Electronico</label>
@@ -33,12 +33,7 @@
       </div>
       <div>
         <label>Elige el plan que deseas tomar</label>
-        <select v-model="reservaData.id_plan" type="number">
-          <option disabled value="">Elige el plan que deseas reservar</option>
-          <option value=1>Plan 1</option>
-          <option value=2>Plan 2</option>
-          <option value=3>Plan 3</option>
-        </select>
+        <input v-model="reservaData.id_plan" type="number">
       </div>
       <button type="submit" class="btn btn-form">Reservar Ahora</button>
     </form>
@@ -64,10 +59,11 @@ export default {
   },
   methods: {
     agregarReserva: async function () {
+      console.log(this.reservaData)
       await this.$apollo.mutate(
         {
           mutation: gql`
-            mutation Mutation($reserva: ReservaInput) {
+            mutation CreateReserva($reserva: ReservaInput) {
               createReserva(reserva: $reserva) {
                 tipo_documento
                 numero_documento
