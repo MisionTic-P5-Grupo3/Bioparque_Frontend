@@ -10,7 +10,7 @@ export default {
   name: 'App'
 }
 
-// localStorage.setItem("login", true)
+// localStorage.setItem('login', true)
 localStorage.setItem('login', false)
 </script>
 

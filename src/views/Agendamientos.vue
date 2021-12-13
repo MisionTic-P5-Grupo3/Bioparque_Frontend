@@ -34,8 +34,8 @@
           <td>{{ reserva.correo_electronico }}</td>
           <td>{{ reserva.fecha }}</td>
           <td>{{ reserva.id_plan.nombre_plan }}</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
+          <td><router-link :to="{name: 'ActualizarReserva', params: { id_reserva: reserva.id_reserva }}"><button>Editar</button></router-link></td>
+          <td><button v-on:click="deleteReservas(reserva.id_reserva)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -74,7 +74,21 @@ export default {
   created: function () {
     this.$apollo.queries.getReservas.refetch()
   },
-  methods: {}
+  methods: {
+    deleteReservas (id) {
+      console.log(`Delete reserva: # ${id}`)
+      this.$apollo.mutate({
+        mutation: gql`mutation deleteReservas($id: idReserva){
+            deleteReservas(idReserva: $id)
+          }`,
+        variables: {
+          id: id
+        }
+      }
+      )
+      // location.reload()
+    }
+  }
 }
 </script>
 

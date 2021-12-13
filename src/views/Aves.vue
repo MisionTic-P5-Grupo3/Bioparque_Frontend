@@ -2,78 +2,15 @@
   <div class="aves">
     <h1>Todas las aves de nuestra reserva AVESMS.</h1>
     <div class="container planes_container">
-      <div class="tarjeta_ave">
+      <div class="tarjeta_ave" v-for="ave in getAves" :key="ave.nombreAve">
         <img
           class="ave_info"
           src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
         />
-        <h3>Ave 1</h3>
-        <h5>Jornada: Diurno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-      </div>
-      <div class="tarjeta_ave">
-        <img
-          class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Ave 2</h3>
-        <h5>Jornada: Diurno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-      </div>
-      <div class="tarjeta_ave">
-        <img
-          class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Ave 3</h3>
-        <h5>Jornada: Nocturno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-      </div>
-      <div class="tarjeta_ave">
-        <img
-          class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Ave 4</h3>
-        <h5>Jornada: Diurno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-      </div>
-      <div class="tarjeta_ave">
-        <img
-          class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Ave 5</h3>
-        <h5>Jornada: Diurno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-      </div>
-      <div class="tarjeta_ave">
-        <img
-          class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Ave 6</h3>
-        <h5>Jornada: Nocturno</h5>
+        <h5>Jornada: {{ ave.tipoAve }}</h5>
+        <h5>Tamaño: {{ ave.tamano }}</h5>
+        <h5>Nombre Cientifico: {{ ave.nombreCientificoAve }}</h5>
+
         <p class="descripcion">
           Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
           amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
@@ -84,8 +21,32 @@
   </div>
 </template>
 <script>
+import gql from 'graphql-tag'
 export default {
-  name: 'Aves'
+  name: 'Aves',
+  data: function () {
+    return {
+      getAves: []
+    }
+  },
+  apollo: {
+    getAves: {
+      query: gql`
+        query Query {
+          getAves {
+            nombreAve
+            nombreCientificoAve
+            tamano
+            tipoAve
+          }
+        }
+      `
+    }
+  },
+  created: function () {
+    this.$apollo.queries.getAves.refetch()
+  },
+  methods: {}
 }
 </script>
 
@@ -96,7 +57,7 @@ export default {
 }
 .tarjeta_ave {
   border: 3px solid black;
-  height: 460px;
+  height: 480px;
   width: 30%;
   margin: 40px auto 0;
 }
