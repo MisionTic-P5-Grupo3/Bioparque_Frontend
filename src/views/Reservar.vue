@@ -43,7 +43,7 @@
 <script>
 import gql from 'graphql-tag'
 export default {
-  name: 'Inicio',
+  name: 'Reservar',
   data: function () {
     return {
       reservaData: {
