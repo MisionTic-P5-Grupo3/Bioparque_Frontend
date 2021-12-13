@@ -84,8 +84,53 @@
   </div>
 </template>
 <script>
+
+import gql from "graphql-tag";
+
 export default {
-  name: 'Aves'
+  name: 'Aves',
+
+  data : function () {
+      return {
+          aves: {
+              nombreAve:"",
+              nombreCientificoAve:"",
+              tamano:"",
+              tipoAve:"",
+              descripcion:"",
+      },
+      };
+  },
+methods: {
+    processAves: async function() {
+        await this.$apollo.mutate(
+            {
+               mutation: gql`
+                mutation CreateAve($ave: AveInput!) {
+                createAve(ave: $ave) {
+                    nombreAve
+                    nombreCientificoAve
+                    tamano
+                    tipoAve
+  }
+}
+    `, 
+    variables: {
+        ave: this.ave,
+       },
+     })
+    .then((result) => {
+        let dataLogIn = {
+            aves: this.ave.ave,
+        };
+
+        this.$emit("Aves", dataLogIn);
+    })
+    .catch((error) => {
+        alert("ERROR: Fallo en el registro del ave.")
+    });
+  },
+ },
 }
 </script>
 
