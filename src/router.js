@@ -9,6 +9,8 @@ import PlanesAdmin from './views/PlanesAdmin.vue'
 import AvesAdmin from './views/AvesAdmin.vue'
 import CrearPlan from './views/CrearPlan.vue'
 import ActualizarReserva from './views/ActualizarReserva.vue'
+import AgregarAve from './views/AgregarAve.vue'
+import EditarAve from './views/EditarAve.vue'
 
 const routes = [
   {
@@ -55,6 +57,16 @@ const routes = [
     path: '/ActualizarReserva/:id_reserva?',
     name: 'ActualizarReserva',
     component: ActualizarReserva
+  },
+  {
+    path: '/agregarAve',
+    name: 'AgregarAve',
+    component: AgregarAve
+  },
+  {
+    path: '/editarAve/:id_ave?',
+    name: 'EditarAve',
+    component: EditarAve
   },
   {
     path: '/avesAdmin',

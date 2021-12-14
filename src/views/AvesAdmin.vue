@@ -1,7 +1,7 @@
 <template>
   <div id="AvesAdmin">
     <div class="btn-left">
-      <button type="button" class="btn btn-admin">Añadir Ave</button>
+      <router-link to="/AgregarAve"><button type="button" class="btn btn-admin">Añadir Ave</button></router-link>
     </div>
     <div class="container_table">
       <table>
@@ -20,27 +20,7 @@
             Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
           </td>
           <td>Diurno</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
-        </tr>
-        <tr class="cuerpo_tabla">
-          <td>1</td>
-          <td>Colibrie</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>Diurno</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
-        </tr>
-        <tr class="cuerpo_tabla">
-          <td>1</td>
-          <td>Colibrie</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>Diurno</td>
-          <td>Editar</td>
+          <td><router-link to="/EditarAve/1"><button>Editar</button></router-link></td>
           <td>Eliminar</td>
         </tr>
       </table>

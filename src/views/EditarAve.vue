@@ -3,39 +3,33 @@
     <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
     <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
       <div>
-        <label>Tipo de Documento</label>
-        <select v-model="reservaData.tipo_documento" type="text">
-         <option value="Cédula">Cédula</option>
-         <option value="Cédula extranjera">Cédula extranjera</option>
-         <option value="Pasaporte">Pasaporte</option>
+        <label>Nombre Ave</label>
+        <input type="text" placeholder="Escribe el nombre del ave" />
+      </div>
+      <div>
+        <label>Nombre Cientifico Ave</label>
+        <input type="text" placeholder="Escribe el nombre cientifico del ave" />
+      </div>
+      <div>
+        <label>Jornada</label>
+        <select type="text">
+         <option value="diurno">Diurno</option>
+         <option value="nocturno">Nocturno</option>
         </select>
       </div>
       <div>
-        <label>Número de Documento</label>
-        <input v-model="reservaData.numero_documento" type="number" placeholder="Escribe tu número de documento" />
+        <label>Tamaño (centimetros)</label>
+         <input type="number" placeholder="Escribe el tamaño promedop del ave en centimetros" />
       </div>
       <div>
-        <label>Nombre Completo</label>
-        <input v-model="reservaData.nombre_completo" type="text" placeholder="Escribe tu Nombre y Apellidos" />
+        <label>Descripción Ave</label>
+        <input type="text" placeholder="Escribe la descripción del ave" />
       </div>
       <div>
-        <label>Número de Telefono</label>
-        <input
-          v-model="reservaData.telefono" type="text" placeholder="Escribe tu número de contacto" />
+        <label>Url Imagen Ave</label>
+        <input type="text" placeholder="Escribe la url con una imagen del ave" />
       </div>
-      <div>
-        <label>Correo Electronico</label>
-        <input v-model="reservaData.correo_electronico" type="mail" placeholder="Escribe tu correo electronico" />
-      </div>
-      <div>
-        <label>Fecha de reserva</label>
-        <input v-model="reservaData.fecha" type="text" />
-      </div>
-      <div>
-        <label>Elige el plan que deseas tomar</label>
-        <input v-model="reservaData.id_plan" type="number">
-      </div>
-      <button type="submit" class="btn btn-form">Reservar Ahora</button>
+      <button type="submit" class="btn btn-form">Agregar Ave</button>
     </form>
   </div>
 </template>
@@ -43,7 +37,7 @@
 <script>
 import gql from 'graphql-tag'
 export default {
-  name: 'Reservar',
+  name: 'AgregarAve',
   data: function () {
     return {
       reservaData: {
