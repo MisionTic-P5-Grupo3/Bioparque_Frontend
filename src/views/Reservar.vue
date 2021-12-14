@@ -83,12 +83,10 @@ export default {
         .then((result) => {
           const message = `Reserva del usuario ${result.data.reservaData.nombre_completo} realizada de manera exitosa. `
           alert(message)
-          this.$emit('completedRegister')
         })
         .catch((error) => {
           console.log(error)
-          if (error.message === '400: Bad Request') {
-            alert('Error. Fallo en el registro de reserva.')
+          alert('Error. Fallo en el registro de reserva.')
           }
         })
     }
