@@ -32,7 +32,6 @@
             <td>{{ reserva.correo_electronico }}</td>
             <td>{{ reserva.fecha }}</td>
             <td>{{ reserva.id_plan.nombre_plan }}</td>
-            <td>{{ reserva.fecha }}</td>
             <td><router-link :to="{name: 'ActualizarReserva', params: { id_reserva: reserva.id_reserva }}"><button>Editar</button></router-link></td>
             <td><button v-on:click="deleteReservas(reserva.id_reserva)">Eliminar</button></td>
           </tr>
@@ -47,7 +46,22 @@ export default {
   name: 'Agendamientos',
   data: function () {
     return {
+      searchInput: '',
+      reservaId: '',
+      results: [],
       getReservas: [],
+      getReserva: {
+        idReserva: '',
+        tipoDocumento: '',
+        documento: '',
+        nombreCompleto: '',
+        telefono: '',
+        mail: '',
+        fecha: '',
+        idPlan: {
+          idPlan: ''
+        }
+      },
       login: null
     }
   },
@@ -78,18 +92,19 @@ export default {
     }
   },
   methods: {
-    deleteReservas (id) {
-      console.log(`Delete reserva: # ${id}`)
-      this.$apollo.mutate({
-        mutation: gql`mutation deleteReservas($id: idReserva){
-            deleteReservas(idReserva: $id)
-          }`,
-        variables: {
-          id: id
-        }
+    deleteReservas: async function (id) {
+      if (window.confirm('Confirma para eliminar')) {
+        console.log(`Delete reserva: # ${id}`)
+        await this.$apollo.mutate({
+          mutation: gql`
+            mutation Mutation($idReserva: Int!) {
+              deleteReserva(idReserva: $idReserva)
+            }
+          `,
+          variables: { idReserva: id }
+        })
       }
-      )
-      // location.reload()
+      location.reload()
     }
   }
 }

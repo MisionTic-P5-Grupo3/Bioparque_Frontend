@@ -13,7 +13,7 @@
         </button>
       </nav>
       <nav v-if="logged === 'true'">
-        <router-link to="agendamientos" class="planes-nav white"
+        <router-link to="/agendamientos" class="planes-nav white"
           >Agendamientos</router-link
         >
         <router-link to="planesAdmin" class="planes-nav white"

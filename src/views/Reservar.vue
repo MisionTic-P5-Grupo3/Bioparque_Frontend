@@ -46,20 +46,13 @@ export default {
   name: 'Reservar',
   data: function () {
     return {
-      reservaData: {
-        tipoDocumento: '',
-        numeroDocumento: null,
-        nombreCompleto: '',
-        telefono: '',
-        correoElectronico: '',
-        fecha: '2000-01-01',
-        idPlan: null
-      }
+      reservaData: {}
     }
   },
   methods: {
     agregarReserva: async function () {
-      console.log(this.reservaData)
+      var info = JSON.parse(JSON.stringify(this.reservaData))
+      console.log(info)
       await this.$apollo.mutate(
         {
           mutation: gql`
@@ -76,12 +69,12 @@ export default {
             }
           `,
           variables: {
-            reserva: this.reservaData
+            reserva: info
           }
         }
       )
         .then((result) => {
-          const message = `Reserva del usuario ${result.data.reservaData.nombre_completo} realizada de manera exitosa. `
+          const message = 'Reserva del usuario realizada de manera exitosa.'
           alert(message)
           this.$emit('completedRegister')
         })

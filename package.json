@@ -47,7 +47,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "camelcase": ["error", {"allow": ["aa_bb"]}]
+      "@typescript-eslint/camelcase": "off"
     }
   },
   "browserslist": [
