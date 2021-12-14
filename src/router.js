@@ -7,6 +7,7 @@ import Login from './views/Login.vue'
 import Agendamientos from './views/Agendamientos.vue'
 import PlanesAdmin from './views/PlanesAdmin.vue'
 import AvesAdmin from './views/AvesAdmin.vue'
+import ActualizarReserva from './views/ActualizarReserva.vue'
 
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
     component: PlanesAdmin
   },
   {
+    path: '/ActualizarReserva/:id_reserva?',
+    name: 'ActualizarReserva',
+    component: ActualizarReserva
+  },
+  {
     path: '/avesAdmin',
     name: 'AvesAdmin',
     component: AvesAdmin
@@ -55,5 +61,4 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
-
 export default router

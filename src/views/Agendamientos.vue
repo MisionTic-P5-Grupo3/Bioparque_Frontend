@@ -1,6 +1,6 @@
 <template>
   <div id="agendamientos">
-    <div class="btn-left" v-if="editar == false">
+    <div class="btn-left">
       <button type="button" class="btn btn-admin">
         <router-link to="/reservar" class="btn" style="text-decoration: none"
           >Crear Reserva</router-link
@@ -46,70 +46,29 @@
             <td>{{ result.correo_electronico }}</td>
             <td>{{ result.fecha }}</td>
             <td>{{ result.id_plan.nombre_plan }}</td>
-            <td v-on:click="editarOnClick(result.id_reserva)">Editar</td>
-            <td v-on:click="eliminar(result.id_reserva)">Eliminar</td>
+            <td>
+              <router-link
+                :to="{
+                  name: 'ActualizarReserva',
+                  params: { id_reserva: result.id_reserva }
+                }"
+                ><button
+                  v-on:click="
+                    localStorage.setItem('id_reserva', result.id_reserva)
+                  "
+                >
+                  Editar
+                </button></router-link
+              >
+            </td>
+            <td>
+              <button v-on:click="deleteReservas(result.id_reserva)">
+                Eliminar
+              </button>
+            </td>
           </tr>
         </table>
       </div>
-    </div>
-    <div>
-      <form class="form" v-if="editar">
-        <div>
-          <label>Tipo de Documento</label>
-          <select v-model="reservaUpdate.tipo_documento">
-            <option disabled value="">Elige un tipo de documento</option>
-            <option>Cédula</option>
-            <option>Cedula extranjera</option>
-            <option>Pasaporte</option>
-          </select>
-        </div>
-        <div>
-          <label>Número de Documento</label>
-          <input
-            v-model="reservaUpdate.documento"
-            type="number"
-            placeholder="Escribe tu número de documento"
-          />
-        </div>
-        <div>
-          <label>Nombre Completo</label>
-          <input
-            v-model="reservaUpdate.nombre_completo"
-            placeholder="Escribe tu Nombre y Apellidos"
-          />
-        </div>
-        <div>
-          <label>Número de Telefono</label>
-          <input
-            v-model.number="reservaUpdate.telefono"
-            type="number"
-            placeholder="Escribe tu número de contacto"
-          />
-        </div>
-        <div>
-          <label>Correo Electronico</label>
-          <input
-            v-model="reservaUpdate.mail"
-            placeholder="Escribe tu correo electronico"
-          />
-        </div>
-        <div>
-          <label>Fecha de reserva</label>
-          <input v-model="reservaUpdate.fecha" type="date" />
-        </div>
-        <div>
-          <label>Elige el plan que deseas tomar</label>
-          <select v-model="reservaUpdate.id_plan">
-            <option disabled value="">Elige el plan que deseas reservar</option>
-            <option>Plan 1</option>
-            <option>Plan 2</option>
-            <option>Plan 3</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-form" @click="actualizar">
-          Actualizar
-        </button>
-      </form>
     </div>
   </div>
 </template>
@@ -122,7 +81,6 @@ export default {
     return {
       searchInput: '',
       reservaId: '',
-      editar: false,
       results: [],
       getReservas: [],
       getReserva: {
@@ -136,15 +94,6 @@ export default {
         id_plan: {
           id_plan: ''
         }
-      },
-      reservaUpdate: {
-        tipo_documento: '',
-        documento: '',
-        nombre_completo: '',
-        telefono: '',
-        mail: '',
-        fecha: '',
-        id_plan: ''
       }
     }
   },
@@ -166,42 +115,15 @@ export default {
           }
         }
       `
-    },
-    getReserva: {
-      query: gql`
-        query Query($idReserva: Int!) {
-          getReserva(idReserva: $idReserva) {
-            id_reserva
-            tipo_documento
-            numero_documento
-            nombre_completo
-            telefono
-            correo_electronico
-            fecha
-            id_plan {
-              id_plan
-            }
-          }
-        }
-      `,
-      variables () {
-        return {
-          idReserva: 1
-        }
-      }
     }
   },
-  beforeCreate () {
-    console.log('At this point, events and lifecycle have been initialized.')
-  },
-  created () {
+  created: function () {
     this.$apollo.queries.getReservas.refetch()
     this.setResult(this.getReservas)
-    this.$apollo.queries.getReserva.refetch()
-    console.log(this.results)
   },
+
   methods: {
-    eliminar: async function (id) {
+    deleteReservas: async function (id) {
       if (window.confirm('Confirma para eliminar')) {
         await this.$apollo.mutate({
           mutation: gql`
@@ -212,14 +134,7 @@ export default {
           variables: { idReserva: id }
         })
       }
-    },
-    editarOnClick (id) {
-      this.editar = true
-      this.reservaId = id
-    },
-    actualizar () {
-      this.ReservaUpdate()
-      this.$router.push({ name: 'account' })
+      location.reload()
     },
     setResult (reservaResult) {
       this.results = []
@@ -234,40 +149,6 @@ export default {
       return getFilterReservas.length === 0
         ? alert('No se encontraron registros por ese usuario o id')
         : this.setResult(getFilterReservas)
-    },
-    ReservaUpdate: async function () {
-      try {
-        await this.$apollo.mutate({
-          mutation: gql`
-            mutation Mutation($reserva: ReservaUpdate, $idReserva: Int!) {
-              ReservaUpdate(Reserva: $reserva, idReserva: $idReserva) {
-                tipo_documento
-                nombre_completo
-                telefono
-                correo_electronico
-                fecha
-                numero_documento
-                id_reserva
-                id_plan
-              }
-            }
-          `,
-          variables: {
-            idReserva: parseInt(this.reservaId),
-            reserva: {
-              tipo_documento: this.reservaUpdate.tipo_documento,
-              nombre_completo: this.reservaUpdate.nombre_completo,
-              telefono: this.reservaUpdate.telefono.toString(),
-              correo_electronico: this.reservaUpdate.mail,
-              fecha: this.reservaUpdate.fecha,
-              id_plan: parseInt(this.reservaUpdate.id_plan.substring(5)),
-              numero_documento: this.reservaUpdate.documento
-            }
-          }
-        })
-      } catch (error) {
-        console.log(error)
-      }
     }
   }
 }
