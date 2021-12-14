@@ -22,6 +22,11 @@
         <input
           v-model="planData.precio" type="number" placeholder="Escribe el precio en pesos colombianos" />
       </div>
+      <div>
+        <label>Imagen</label>
+        <input
+          v-model="planData.url" type="text" placeholder="Pega la url de la imagen" />
+      </div>
       <button type="submit" class="btn btn-form">Crear Plan Ahora</button>
     </form>
   </div>

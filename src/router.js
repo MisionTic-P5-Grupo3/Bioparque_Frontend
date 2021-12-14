@@ -8,6 +8,7 @@ import Agendamientos from './views/Agendamientos.vue'
 import PlanesAdmin from './views/PlanesAdmin.vue'
 import AvesAdmin from './views/AvesAdmin.vue'
 import CrearPlan from './views/CrearPlan.vue'
+import EditarPlan from './views/EditarPlan.vue'
 import ActualizarReserva from './views/ActualizarReserva.vue'
 import AgregarAve from './views/AgregarAve.vue'
 import EditarAve from './views/EditarAve.vue'
@@ -105,6 +106,27 @@ const routes = [
     path: '/ActualizarReserva/:id_reserva?',
     name: 'ActualizarReserva',
     component: ActualizarReserva,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
+  },
+  {
+    path: '/EditarPlan/:id_plan?',
+    name: 'EditarPlan',
+    component: EditarPlan,
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('login') !== 'false') {
         next()

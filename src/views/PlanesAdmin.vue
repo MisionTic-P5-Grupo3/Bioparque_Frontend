@@ -1,7 +1,7 @@
 <template>
   <div id="agendamientos">
     <div class="btn-left">
-      <button type="button" class="btn btn-admin">Crear Plan</button>
+      <router-link to="/crearPlan"><button type="button" class="btn btn-admin">Crear Plan</button></router-link>
     </div>
     <div class="container_table">
       <table>
@@ -14,38 +14,14 @@
           <th class="editar_tabla">Editar</th>
           <th class="eliminar_tabla">Eliminar</th>
         </tr>
-        <tr class="cuerpo_tabla">
-          <td>1</td>
-          <td>Caminata ecológica</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>$500.000 COP</td>
-          <td>Diurno</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
-        </tr>
-        <tr class="cuerpo_tabla">
-          <td>2</td>
-          <td>Caminata ecológica</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>$500.000 COP</td>
-          <td>Diurno</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
-        </tr>
-        <tr class="cuerpo_tabla">
-          <td>3</td>
-          <td>Caminata ecológica</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>$500.000 COP</td>
-          <td>Diurno</td>
-          <td>Editar</td>
-          <td>Eliminar</td>
+        <tr class="cuerpo_tabla" v-for="plan in getPlans" :key="plan.id_plan">
+          <td>{{ plan.id_plan }}</td>
+          <td>{{ plan.nombre_plan }}</td>
+          <td>{{ plan.descripcion }}</td>
+          <td>${{plan.precio}}</td>
+          <td>{{ plan.jornada }}</td>
+          <td><router-link :to="{name: 'EditarPlan', params: { id_plan: plan.id_plan }}"><button>Editar</button></router-link></td>
+          <td><button>Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -53,8 +29,34 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 export default {
-  name: 'Agendamientos'
+  name: 'Agendamientos',
+  data: function () {
+    return {
+      getPlans: []
+    }
+  },
+  apollo: {
+    getPlans: {
+      query: gql`
+        query Query {
+          getPlans {
+            id_plan
+            nombre_plan
+            precio
+            descripcion
+            jornada
+            url
+          }
+        }
+      `
+    }
+  },
+  created: function () {
+    this.$apollo.queries.getPlans.refetch()
+  },
+  methods: {}
 }
 </script>
 

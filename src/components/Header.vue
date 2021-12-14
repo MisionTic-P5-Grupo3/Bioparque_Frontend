@@ -16,7 +16,7 @@
         <router-link to="/agendamientos" class="planes-nav white"
           >Agendamientos</router-link
         >
-        <router-link to="planesAdmin" class="planes-nav white"
+        <router-link to="/planesAdmin" class="planes-nav white"
           >Planes</router-link
         >
         <router-link to="avesAdmin" class="planes-nav white">Aves</router-link>

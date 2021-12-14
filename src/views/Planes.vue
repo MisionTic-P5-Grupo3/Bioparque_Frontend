@@ -2,56 +2,54 @@
   <div class="planes">
     <h1>Planes AVESMS</h1>
     <div class="container planes_container">
-      <div class="tarjeta_plan">
+      <div class="tarjeta_plan" v-for="plan in getPlans" :key="plan.id_plan">
         <img
           class="ave_plan"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
+          :src="plan.url"
         />
-        <h3>Plan 1</h3>
-        <h5>Jornada: Diurno</h5>
+        <h3>Plan: {{ plan.nombre_plan }}</h3>
+        <h5>Jornada: {{ plan.jornada}} </h5>
         <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
+          {{ plan.descripcion}}
         </p>
-        <h5>Precio: $115.000</h5>
-      </div>
-      <div class="tarjeta_plan">
-        <img
-          class="ave_plan"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Plan 2</h3>
-        <h5>Jornada: Diurno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-        <h5>Precio: $200.000</h5>
-      </div>
-      <div class="tarjeta_plan">
-        <img
-          class="ave_plan"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
-        />
-        <h3>Plan 3</h3>
-        <h5>Jornada: Nocturno</h5>
-        <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
-        </p>
-        <h5>Precio: $90.000</h5>
+        <h5>Precio: {{plan.precio}}</h5>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import gql from 'graphql-tag'
 export default {
-  name: 'Planes'
+  name: 'Planes',
+  data: function () {
+    return {
+      getPlans: []
+    }
+  },
+  apollo: {
+    getPlans: {
+      query: gql`
+        query Query {
+          getPlans {
+            id_plan
+            nombre_plan
+            precio
+            descripcion
+            jornada
+            url
+          }
+        }
+      `
+    }
+  },
+  created: function () {
+    this.$apollo.queries.getPlans.refetch()
+  },
+  methods: {}
+
 }
+
 </script>
 
 <style>
