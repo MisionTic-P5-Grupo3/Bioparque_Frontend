@@ -1,7 +1,7 @@
 <template>
   <div class="actualizarReserva">
     <h1>Actualizar agendamiento</h1>
-    <form class="form" method="POST" v-on:submit.prevent="actualizarReserva">
+    <form class="form" method="POST" v-on:submit.prevent="actualizarReserva" v-if="this.login != false">
       <div>
         <label>Tipo de Documento</label>
         <select  type="select" v-model="getReserva.tipo_documento">

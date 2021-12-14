@@ -41,37 +41,149 @@ const routes = [
   {
     path: '/agendamientos',
     name: 'Agendamientos',
-    component: Agendamientos
+    component: Agendamientos,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/CrearPlan',
     name: 'CrearPlan',
-    component: CrearPlan
+    component: CrearPlan,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/planesAdmin',
     name: 'PlanesAdmin',
-    component: PlanesAdmin
+    component: PlanesAdmin,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/ActualizarReserva/:id_reserva?',
     name: 'ActualizarReserva',
-    component: ActualizarReserva
+    component: ActualizarReserva,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/agregarAve',
     name: 'AgregarAve',
-    component: AgregarAve
+    component: AgregarAve,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/editarAve/:id_ave?',
     name: 'EditarAve',
-    component: EditarAve
+    component: EditarAve,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   },
   {
     path: '/avesAdmin',
     name: 'AvesAdmin',
-    component: AvesAdmin
+    component: AvesAdmin,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('login') !== 'false') {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    },
+    beforeRouteUpdate: (to, from, next) => {
+      if (localStorage.getItem('login') !== false) {
+        next()
+      } else {
+        alert('No tienes autorización para acceder a este sitio web')
+        next(false)
+      }
+    }
   }
 ]
 

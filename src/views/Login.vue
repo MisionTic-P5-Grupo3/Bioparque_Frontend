@@ -1,11 +1,11 @@
 <template>
   <div id="login">
     <h3>Iniciar Sesion</h3>
-    <form class="login_container">
+    <form v-on:submit.prevent="login" class="login_container">
       <div>
         <label>Correo Electrónico</label>
         <input
-          v-model.number="mail"
+          v-model="reservaData.username"
           type="mail"
           placeholder="Escribe tu correo electrónico"
         />
@@ -13,7 +13,7 @@
       <div>
         <label>Contraseña</label>
         <input
-          v-model.number="password"
+          v-model="reservaData.password"
           type="password"
           placeholder="Escribe tu contraseña"
         />
@@ -24,8 +24,47 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 export default {
-  name: 'Login'
+  name: 'Login',
+  data: function () {
+    return {
+      reservaData: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    login: async function () {
+      var credentials = {
+        username: this.reservaData.username,
+        password: this.reservaData.password
+      }
+      await this.$apollo.mutate(
+        {
+          mutation: gql`
+            mutation CreateReserva($credentials: CredentialsInput!) {
+              logIn(credentials: $credentials) {
+                access
+                refresh
+              }
+            }
+          `,
+          variables: {
+            credentials
+          }
+        }
+      ).then((data) => {
+        var token = JSON.stringify(data)
+        var dataToken = JSON.parse(token)
+        localStorage.setItem('login', true)
+        localStorage.setItem('access', dataToken.data.logIn.access)
+        localStorage.setItem('refresh', dataToken.data.logIn.refresh)
+        location.reload()
+      }).then(await this.$router.push('/'))
+    }
+  }
 }
 </script>
 

@@ -5,6 +5,7 @@
       <nav v-if="logged === 'false'">
         <router-link to="planes" class="planes-nav white">Planes</router-link>
         <router-link to="aves" class="planes-nav white">Aves</router-link>
+        <router-link to="login" class="planes-nav white">LogIn</router-link>
         <button class="button-reservar">
           <router-link to="reservar" class="texto-reservar white"
             >Reservar</router-link
@@ -19,7 +20,7 @@
           >Planes</router-link
         >
         <router-link to="avesAdmin" class="planes-nav white">Aves</router-link>
-        <button class="button-reservar">
+        <button class="button-reservar" v-on:click="cerrarSesion">
           <router-link to="/" class="texto-reservar white"
             >Cerrar Sesion</router-link
           >
@@ -35,6 +36,15 @@ export default {
   data: function () {
     return {
       logged: localStorage.getItem('login')
+    }
+  },
+  methods: {
+    cerrarSesion: function () {
+      localStorage.setItem('login', false)
+      localStorage.removeItem('access')
+      localStorage.removeItem('refresh')
+      this.$router.push('/')
+      location.reload()
     }
   }
 }

@@ -1,44 +1,43 @@
 <template>
   <div id="agendamientos">
-    <div class="btn-left">
-      <button type="button" class="btn btn-admin">
-        <router-link to="/reservar" class="btn" style="text-decoration: none"
-          >Crear Reserva</router-link
-        >
-      </button>
-    </div>
-    <div class="container_table">
-      <table>
-        <tr class="encabezado_tabla">
-          <th class="id_tabla">ID</th>
-          <th class="tipo_documento_tabla">Tipo de Documento</th>
-          <th class="documento_tabla">Número de Documento</th>
-          <th class="nombre_tabla">Nombre Completo</th>
-          <th class="telefono_tabla">Telefono</th>
-          <th class="correo_tabla">Correo Electrónico</th>
-          <th class="fecha_tabla">Fecha</th>
-          <th class="plan_tabla">Plan</th>
-          <th class="editar_tabla">Editar</th>
-          <th class="eliminar_tabla">Eliminar</th>
-        </tr>
-        <tr
-          class="cuerpo_tabla"
-          v-for="reserva in getReservas"
-          :key="reserva.id_reserva"
-        >
-          <td>{{ reserva.id_reserva }}</td>
-          <td class="tipo_documento_tabla">{{ reserva.tipo_documento }}</td>
-          <td>{{ reserva.numero_documento }}</td>
-          <td>{{ reserva.nombre_completo }}</td>
-          <td>{{ reserva.telefono }}</td>
-          <td>{{ reserva.correo_electronico }}</td>
-          <td>{{ reserva.fecha }}</td>
-          <td>{{ reserva.id_plan.nombre_plan }}</td>
-          <td><router-link :to="{name: 'ActualizarReserva', params: { id_reserva: reserva.id_reserva }}"><button>Editar</button></router-link></td>
-          <td><button v-on:click="deleteReservas(reserva.id_reserva)">Eliminar</button></td>
-        </tr>
-      </table>
-    </div>
+      <div class="btn-left">
+        <button type="button" class="btn btn-admin">
+          <router-link to="/reservar" class="btn" style="text-decoration: none">Crear Reserva</router-link>
+        </button>
+      </div>
+      <div class="container_table">
+        <table>
+          <tr class="encabezado_tabla">
+            <th class="id_tabla">ID</th>
+            <th class="tipo_documento_tabla">Tipo de Documento</th>
+            <th class="documento_tabla">Número de Documento</th>
+            <th class="nombre_tabla">Nombre Completo</th>
+            <th class="telefono_tabla">Telefono</th>
+            <th class="correo_tabla">Correo Electrónico</th>
+            <th class="fecha_tabla">Fecha</th>
+            <th class="plan_tabla">Plan</th>
+            <th class="editar_tabla">Editar</th>
+            <th class="eliminar_tabla">Eliminar</th>
+          </tr>
+          <tr
+            class="cuerpo_tabla"
+            v-for="reserva in getReservas"
+            :key="reserva.id_reserva"
+          >
+            <td>{{ reserva.id_reserva }}</td>
+            <td class="tipo_documento_tabla">{{ reserva.tipo_documento }}</td>
+            <td>{{ reserva.numero_documento }}</td>
+            <td>{{ reserva.nombre_completo }}</td>
+            <td>{{ reserva.telefono }}</td>
+            <td>{{ reserva.correo_electronico }}</td>
+            <td>{{ reserva.fecha }}</td>
+            <td>{{ reserva.id_plan.nombre_plan }}</td>
+            <td>{{ reserva.fecha }}</td>
+            <td><router-link :to="{name: 'ActualizarReserva', params: { id_reserva: reserva.id_reserva }}"><button>Editar</button></router-link></td>
+            <td><button v-on:click="deleteReservas(reserva.id_reserva)">Eliminar</button></td>
+          </tr>
+        </table>
+      </div>
   </div>
 </template>
 
@@ -48,7 +47,8 @@ export default {
   name: 'Agendamientos',
   data: function () {
     return {
-      getReservas: []
+      getReservas: [],
+      login: null
     }
   },
   apollo: {
@@ -73,6 +73,9 @@ export default {
   },
   created: function () {
     this.$apollo.queries.getReservas.refetch()
+    if (localStorage.getItem('login') === true) {
+      this.login = true
+    }
   },
   methods: {
     deleteReservas (id) {
