@@ -10,18 +10,20 @@
           <th class="tipo_documento_tabla">Nombre del Ave</th>
           <th class="documento_tabla">Descripción</th>
           <th class="telefono_tabla">Jornada</th>
+          <th class="tamano_tabla">Tamaño</th>
+          <th class="foto_tabla">Foto</th>
           <th class="editar_tabla">Editar</th>
           <th class="eliminar_tabla">Eliminar</th>
         </tr>
-        <tr class="cuerpo_tabla">
-          <td>1</td>
-          <td>Colibrie</td>
-          <td>
-            Lorem ipsum dolor sit amet ipsum dolor sit amet ipsum dolor sit amet
-          </td>
-          <td>Diurno</td>
-          <td><router-link to="/EditarAve/1"><button>Editar</button></router-link></td>
-          <td>Eliminar</td>
+        <tr class="cuerpo_tabla" v-for="ave in getAves" :key="ave.nombreCientificoAve">
+            <td>{{ ave.nombreCientificoAve }}</td>
+            <td>{{ ave.nombreAve }}</td>
+            <td>{{ ave.descripcion }}</td>
+            <td>{{ ave.tipoAve }}</td>
+            <td>{{ ave.tamano }}</td>
+            <td>{{ ave.url}}</td>
+            <td><router-link :to="'/editarAve/'+ave.nombreCientificoAve"><button>Editar</button></router-link></td>
+            <td><button v-on:click="deleteAve(ave.nombreCientificoAve)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -29,8 +31,64 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 export default {
-  name: 'AvesAdmin'
+  name: 'AvesAdmin',
+  data: function () {
+    return {
+      getAves: []
+    }
+  },
+  apollo: {
+    getAves: {
+      query: gql`
+      query GetAves {
+        getAves {
+          nombreAve
+          nombreCientificoAve
+          tamano
+          tipoAve
+          descripcion
+          url
+        }
+      }
+    `
+    }
+  },
+  created: function () {
+    this.$apollo.queries.getAves.refetch()
+    console.log(this.getAves)
+  },
+  methods: {
+    deleteAve: async function (id) {
+      if (window.confirm('Confirma para eliminar')) {
+        console.log(id)
+        await this.$apollo.mutate({
+          mutation: gql`
+          mutation Mutation($aveId: String!) {
+            deleteAve(aveId: $aveId)
+          }
+        `,
+          variables: { aveId: id }
+        })
+      }
+      location.reload()
+    },
+    setResult (aveResult) {
+      this.results = []
+      this.results = [...aveResult]
+    },
+    getFilterAves (input) {
+      const getFilterAves = this.getAve.filter((ave) => {
+        return ave[input] === this.searchInput
+      })
+      console.log(getFilterAves)
+      this.searchInput = ''
+      return getFilterAves.length === 0
+        ? alert('No se encontro ninguna ave')
+        : this.setResult(getFilterAves)
+    }
+  }
 }
 </script>
 

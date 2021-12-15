@@ -1,7 +1,7 @@
 <template>
   <div class="editarPlan">
     <h1>Editar Plan</h1>
-    <form v-on:submit.prevent="agregarPlan" class="form" id="formPlan" method="POST">
+    <form v-on:submit.prevent="actualizarPlan" class="form" id="formPlan" method="POST">
       <div>
         <label>Nombre del Plan</label>
         <input v-model="getPlan.nombre_plan" name="nombrePlan" type="text" placeholder="Escribe el nombre del plan" />
