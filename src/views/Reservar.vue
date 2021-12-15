@@ -1,39 +1,52 @@
 <template>
   <div class="reservar">
     <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
-    <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
+    <form class="form">
       <div>
         <label>Tipo de Documento</label>
-        <select v-model="reservaData.tipo_documento" type="text">
-         <option value="Cédula">Cédula</option>
-         <option value="Cédula extranjera">Cédula extranjera</option>
-         <option value="Pasaporte">Pasaporte</option>
+        <select v-model="selected" placeholder="Escribe tu correo electronico">
+          <option disabled value="">Elige un tipo de documento</option>
+          <option>Cédula</option>
+          <option>Cedula extranjera</option>
+          <option>Pasaporte</option>
         </select>
       </div>
       <div>
         <label>Número de Documento</label>
-        <input v-model="reservaData.numero_documento" type="number" placeholder="Escribe tu número de documento" />
+        <input
+          v-model.number="documento"
+          type="number"
+          placeholder="Escribe tu número de documento"
+        />
       </div>
       <div>
         <label>Nombre Completo</label>
-        <input v-model="reservaData.nombre_completo" type="text" placeholder="Escribe tu Nombre y Apellidos" />
+        <input v-model="message" placeholder="Escribe tu Nombre y Apellidos" />
       </div>
       <div>
         <label>Número de Telefono</label>
         <input
-          v-model="reservaData.telefono" type="text" placeholder="Escribe tu número de contacto" />
+          v-model.number="telefono"
+          type="number"
+          placeholder="Escribe tu número de contacto"
+        />
       </div>
       <div>
         <label>Correo Electronico</label>
-        <input v-model="reservaData.correo_electronico" type="mail" placeholder="Escribe tu correo electronico" />
+        <input v-model="mail" placeholder="Escribe tu correo electronico" />
       </div>
       <div>
         <label>Fecha de reserva</label>
-        <input v-model="reservaData.fecha" type="text" />
+        <input v-model="date" type="date" />
       </div>
       <div>
         <label>Elige el plan que deseas tomar</label>
-        <input v-model="reservaData.id_plan" type="number">
+        <select v-model="selected" placeholder="Escribe tu correo electronico">
+          <option disabled value="">Elige el plan que deseas reservar</option>
+          <option>Plan 1</option>
+          <option>Plan 2</option>
+          <option>Plan 3</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-form">Reservar Ahora</button>
     </form>
@@ -41,58 +54,8 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 export default {
-  name: 'Reservar',
-  data: function () {
-    return {
-      reservaData: {
-        tipoDocumento: '',
-        numeroDocumento: null,
-        nombreCompleto: '',
-        telefono: '',
-        correoElectronico: '',
-        fecha: '2000-01-01',
-        idPlan: null
-      }
-    }
-  },
-  methods: {
-    agregarReserva: async function () {
-      console.log(this.reservaData)
-      await this.$apollo.mutate(
-        {
-          mutation: gql`
-            mutation CreateReserva($reserva: ReservaInput) {
-              createReserva(reserva: $reserva) {
-                tipo_documento
-                numero_documento
-                nombre_completo
-                telefono
-                correo_electronico
-                fecha
-                id_plan
-              }
-            }
-          `,
-          variables: {
-            reserva: this.reservaData
-          }
-        }
-      )
-        .then((result) => {
-          const message = `Reserva del usuario ${result.data.reservaData.nombre_completo} realizada de manera exitosa. `
-          alert(message)
-          this.$emit('completedRegister')
-        })
-        .catch((error) => {
-          console.log(error)
-          if (error.message === '400: Bad Request') {
-            alert('Error. Fallo en el registro de reserva.')
-          }
-        })
-    }
-  }
+  name: 'Inicio'
 }
 </script>
 

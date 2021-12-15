@@ -7,20 +7,11 @@
 
 <script>
 export default {
-  name: 'App',
-  created: function () {
-    if (localStorage.getItem('login')) {
-    } else {
-      localStorage.setItem('login', false)
-    }
-    if (localStorage.getItem('access')) {
-      this.login = true
-    } else {
-      this.login = false
-    }
-  }
+  name: 'App'
 }
 
+// localStorage.setItem("login", true)
+localStorage.setItem('login', false)
 </script>
 
 <style>

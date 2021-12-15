@@ -1,7 +1,7 @@
 <template>
-  <div class="reservar">
-    <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
-    <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
+  <div class="Aves">
+    <h1> Agreagar las aves de la reserva </h1>
+    <form v-on:submit.prevent="AgregarAve" class="form" method="POST">
       <div>
         <label>Nombre Ave</label>
         <input type="text" placeholder="Escribe el nombre del ave" />
@@ -13,13 +13,13 @@
       <div>
         <label>Jornada</label>
         <select type="text">
-         <option value="diurno">Diurno</option>
-         <option value="nocturno">Nocturno</option>
+        <option value="diurno">Diurno</option>
+        <option value="nocturno">Nocturno</option>
         </select>
       </div>
       <div>
         <label>Tamaño (centimetros)</label>
-         <input type="number" placeholder="Escribe el tamaño promedop del ave en centimetros" />
+        <input type="number" placeholder="Escribe el tamaño promedop del ave en centimetros" />
       </div>
       <div>
         <label>Descripción Ave</label>
@@ -40,49 +40,47 @@ export default {
   name: 'AgregarAve',
   data: function () {
     return {
-      reservaData: {
-        tipoDocumento: '',
-        numeroDocumento: null,
-        nombreCompleto: '',
-        telefono: '',
-        correoElectronico: '',
-        fecha: '2000-01-01',
-        idPlan: null
+      aveData: {
+        nombreAve: '',
+        nombreCientificoAve: '',
+        tamano: null,
+        tipoAve: '',
+        descripcion: '',
+        url: ''
       }
     }
   },
   methods: {
-    agregarReserva: async function () {
-      console.log(this.reservaData)
+    agregarAve: async function () {
+      console.log(this.aveData)
       await this.$apollo.mutate(
         {
           mutation: gql`
-            mutation CreateReserva($reserva: ReservaInput) {
-              createReserva(reserva: $reserva) {
-                tipo_documento
-                numero_documento
-                nombre_completo
-                telefono
-                correo_electronico
-                fecha
-                id_plan
+            mutation CreateAve($ave: AveInput!) {
+              createAve(ave: $ave) {
+                nombreAve
+                nombreCientificoAve
+                tamano
+                tipoAve
+                descripcion
+                url
+                }
               }
-            }
-          `,
+          `
           variables: {
-            reserva: this.reservaData
+            ave: this.aveData
           }
         }
       )
         .then((result) => {
-          const message = `Reserva del usuario ${result.data.reservaData.nombre_completo} realizada de manera exitosa. `
+          const message = `ave creada ${result.data.aveData.nombreAve} de manera exitosa. `
           alert(message)
           this.$emit('completedRegister')
         })
         .catch((error) => {
           console.log(error)
           if (error.message === '400: Bad Request') {
-            alert('Error. Fallo en el registro de reserva.')
+            alert('Error. Fallo en el registro de la Ave.')
           }
         })
     }

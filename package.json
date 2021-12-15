@@ -46,9 +46,7 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {
-      "camelcase": ["error", {"allow": ["aa_bb"]}]
-    }
+    "rules": {}
   },
   "browserslist": [
     "> 1%",

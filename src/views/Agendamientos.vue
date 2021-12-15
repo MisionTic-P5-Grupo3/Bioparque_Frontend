@@ -1,10 +1,24 @@
 <template>
   <div id="agendamientos">
-      <div class="btn-left">
-        <button type="button" class="btn btn-admin">
-          <router-link to="/reservar" class="btn" style="text-decoration: none">Crear Reserva</router-link>
-        </button>
-      </div>
+    <div class="btn-left">
+      <button type="button" class="btn btn-admin">
+        <router-link to="/reservar" class="btn" style="text-decoration: none"
+          >Crear Reserva</router-link
+        >
+      </button>
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Busca Por Id o Documento"
+        v-model="this.searchInput"
+      />
+      <button type="button" @click="getFilterReservas('id_reserva')">
+        Buscar Por Id
+      </button>
+      <button type="button" @click="getFilterReservas('numero_documento')">
+        Buscar Por Usuario
+      </button>
+      <button type="button" @click="setResult(getReservas)">Sin Filtro</button>
       <div class="container_table">
         <table>
           <tr class="encabezado_tabla">
@@ -21,23 +35,41 @@
           </tr>
           <tr
             class="cuerpo_tabla"
-            v-for="reserva in getReservas"
-            :key="reserva.id_reserva"
+            v-for="result in results"
+            :key="result.id_reserva"
           >
-            <td>{{ reserva.id_reserva }}</td>
-            <td class="tipo_documento_tabla">{{ reserva.tipo_documento }}</td>
-            <td>{{ reserva.numero_documento }}</td>
-            <td>{{ reserva.nombre_completo }}</td>
-            <td>{{ reserva.telefono }}</td>
-            <td>{{ reserva.correo_electronico }}</td>
-            <td>{{ reserva.fecha }}</td>
-            <td>{{ reserva.id_plan.nombre_plan }}</td>
-            <td>{{ reserva.fecha }}</td>
-            <td><router-link :to="{name: 'ActualizarReserva', params: { id_reserva: reserva.id_reserva }}"><button>Editar</button></router-link></td>
-            <td><button v-on:click="deleteReservas(reserva.id_reserva)">Eliminar</button></td>
+            <td>{{ result.id_reserva }}</td>
+            <td class="tipo_documento_tabla">{{ result.tipo_documento }}</td>
+            <td>{{ result.numero_documento }}</td>
+            <td>{{ result.nombre_completo }}</td>
+            <td>{{ result.telefono }}</td>
+            <td>{{ result.correo_electronico }}</td>
+            <td>{{ result.fecha }}</td>
+            <td>{{ result.id_plan.nombre_plan }}</td>
+            <td>
+              <router-link
+                :to="{
+                  name: 'ActualizarReserva',
+                  params: { id_reserva: result.id_reserva }
+                }"
+                ><button
+                  v-on:click="
+                    localStorage.setItem('id_reserva', result.id_reserva)
+                  "
+                >
+                  Editar
+                </button></router-link
+              >
+            </td>
+            <td>
+              <button v-on:click="deleteReservas(result.id_reserva)">
+                Eliminar
+              </button>
+            </td>
           </tr>
         </table>
       </div>
+    </div>
   </div>
 </template>
 
@@ -47,8 +79,22 @@ export default {
   name: 'Agendamientos',
   data: function () {
     return {
+      searchInput: '',
+      reservaId: '',
+      results: [],
       getReservas: [],
-      login: null
+      getReserva: {
+        id_reserva: '',
+        tipo_documento: '',
+        documento: '',
+        nombre_completo: '',
+        telefono: '',
+        mail: '',
+        fecha: '',
+        id_plan: {
+          id_plan: ''
+        }
+      }
     }
   },
   apollo: {
@@ -73,23 +119,36 @@ export default {
   },
   created: function () {
     this.$apollo.queries.getReservas.refetch()
-    if (localStorage.getItem('login') === true) {
-      this.login = true
-    }
+    this.setResult(this.getReservas)
   },
+
   methods: {
-    deleteReservas (id) {
-      console.log(`Delete reserva: # ${id}`)
-      this.$apollo.mutate({
-        mutation: gql`mutation deleteReservas($id: idReserva){
-            deleteReservas(idReserva: $id)
-          }`,
-        variables: {
-          id: id
-        }
+    deleteReservas: async function (id) {
+      if (window.confirm('Confirma para eliminar')) {
+        await this.$apollo.mutate({
+          mutation: gql`
+            mutation Mutation($idReserva: Int!) {
+              deleteReserva(idReserva: $idReserva)
+            }
+          `,
+          variables: { idReserva: id }
+        })
       }
-      )
-      // location.reload()
+      location.reload()
+    },
+    setResult (reservaResult) {
+      this.results = []
+      this.results = [...reservaResult]
+    },
+    getFilterReservas (input) {
+      const getFilterReservas = this.getReservas.filter((reserva) => {
+        return reserva[input] === this.searchInput
+      })
+      console.log(getFilterReservas)
+      this.searchInput = ''
+      return getFilterReservas.length === 0
+        ? alert('No se encontraron registros por ese usuario o id')
+        : this.setResult(getFilterReservas)
     }
   }
 }
@@ -97,6 +156,7 @@ export default {
 
 <style>
 .container_table {
+  border: 1px;
   color: rgb(0, 0, 0);
   margin-top: 35px;
   padding: 25px 10px;
@@ -111,6 +171,7 @@ export default {
   height: 25px;
 }
 .container_table table {
+  table-layout: fixed;
   margin: 0 auto;
   word-wrap: break-word;
 }
@@ -133,6 +194,7 @@ export default {
   margin: 0 auto;
   text-align: start;
   height: 60px;
+  align-content: space-around;
 }
 .btn-admin {
   margin: 25px;
