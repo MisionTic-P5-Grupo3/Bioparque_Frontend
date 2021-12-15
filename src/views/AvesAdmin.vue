@@ -2,6 +2,19 @@
   <div id="AvesAdmin">
     <div class="btn-left">
       <router-link to="/AgregarAve"><button type="button" class="btn btn-admin">Añadir Ave</button></router-link>
+      <input
+        type="string"
+        class="form-control"
+        placeholder="Busca Por nombre cientifico o tipo"
+        v-model="this.searchInput"
+      />
+      <button type="button" @click="getFilterAves('nombreCientificoAve')">
+        Buscar Por Nombre Cientifico Ave
+      </button>
+      <button type="button" @click="getFilterAves('tipoAve')">
+        Buscar Por Tipo De Ave
+      </button>
+      <button type="button" @click="setResult(getAves)">Sin Filtro</button>
     </div>
     <div class="container_table">
       <table>
@@ -15,7 +28,7 @@
           <th class="editar_tabla">Editar</th>
           <th class="eliminar_tabla">Eliminar</th>
         </tr>
-        <tr class="cuerpo_tabla" v-for="ave in getAves" :key="ave.nombreCientificoAve">
+        <tr class="cuerpo_tabla" v-for="ave in results" :key="ave.nombreCientificoAve">
             <td>{{ ave.nombreCientificoAve }}</td>
             <td>{{ ave.nombreAve }}</td>
             <td>{{ ave.descripcion }}</td>
@@ -36,7 +49,11 @@ export default {
   name: 'AvesAdmin',
   data: function () {
     return {
-      getAves: []
+      searchInput: '',
+      getAves: [],
+      results: [],
+      getAveById: '',
+      getAvesByTipoAve: []
     }
   },
   apollo: {
@@ -57,7 +74,7 @@ export default {
   },
   created: function () {
     this.$apollo.queries.getAves.refetch()
-    console.log(this.getAves)
+    this.setResult(this.getAves)
   },
   methods: {
     deleteAve: async function (id) {
@@ -79,10 +96,9 @@ export default {
       this.results = [...aveResult]
     },
     getFilterAves (input) {
-      const getFilterAves = this.getAve.filter((ave) => {
+      const getFilterAves = this.getAves.filter((ave) => {
         return ave[input] === this.searchInput
       })
-      console.log(getFilterAves)
       this.searchInput = ''
       return getFilterAves.length === 0
         ? alert('No se encontro ninguna ave')
