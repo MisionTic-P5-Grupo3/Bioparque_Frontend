@@ -21,7 +21,7 @@
           <td>${{plan.precio}}</td>
           <td>{{ plan.jornada }}</td>
           <td><router-link :to="{name: 'EditarPlan', params: { id_plan: plan.id_plan }}"><button>Editar</button></router-link></td>
-          <td><button>Eliminar</button></td>
+          <td><button v-on:click="deletePlan(plan.id_plan)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -47,16 +47,42 @@ export default {
             precio
             descripcion
             jornada
-            url
           }
         }
       `
     }
   },
+  methods: {
+    deletePlan: async function (e) {
+      if (window.confirm('Seguro que deseas eliminar el plan?')) {
+        var planId = await Number(e)
+        await this.$apollo.mutate(
+          {
+            mutation: gql`
+              mutation DeletePlan($planId: Int!) {
+                deletePlan(planId: $planId)
+              }
+            `,
+            variables: {
+              planId: planId
+            }
+          }
+        ).then((result) => {
+          const message = 'Plan eliminado de manera exitosa.'
+          alert(message)
+        })
+          .catch((error) => {
+            console.log(error)
+            if (error.message === '400: Bad Request') {
+              alert('Error. Fallo en el actualizacion de plan.')
+            }
+          })
+      }
+    }
+  },
   created: function () {
     this.$apollo.queries.getPlans.refetch()
-  },
-  methods: {}
+  }
 }
 </script>
 

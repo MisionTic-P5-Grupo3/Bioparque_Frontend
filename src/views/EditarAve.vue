@@ -1,33 +1,33 @@
 <template>
   <div class="reservar">
     <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
-    <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
+    <form v-on:submit.prevent="editarAve" name="formAve" class="form" method="POST">
       <div>
         <label>Nombre Ave</label>
-        <input type="text" v-model="getAveById.nombreAve" />
+        <input type="text" name="nombreAve" v-model="getAveById.nombreAve" />
       </div>
       <div>
         <label>Nombre Cientifico Ave</label>
-        <input type="text" v-model="getAveById.nombreCientificoAve" />
+        <input type="text" name="nombreCientificoAve" v-model="getAveById.nombreCientificoAve" />
       </div>
       <div>
         <label>Jornada</label>
-        <select type="text" v-model="getAveById.tipoAve">
+        <select type="text" name="jornada" v-model="getAveById.tipoAve">
          <option value="diurno">Diurno</option>
          <option value="nocturno">Nocturno</option>
         </select>
       </div>
       <div>
         <label>Tamaño (centimetros)</label>
-         <input type="number" v-model="getAveById.tamano" />
+         <input type="number" name="tamano" v-model="getAveById.tamano" />
       </div>
       <div>
         <label>Descripción Ave</label>
-        <input type="text" v-model="getAveById.descripcion" />
+        <input type="text" name="descripcionAve" v-model="getAveById.descripcion" />
       </div>
       <div>
         <label>Url Imagen Ave</label>
-        <input type="text" v-model="getAveById.url" />
+        <input type="text" name="url" v-model="getAveById.url" />
       </div>
       <button type="submit" class="btn btn-form">Editar Ave</button>
     </form>
@@ -67,7 +67,55 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    editarAve: async function (e) {
+      if (window.confirm('Seguro que deseas actualizar el ave?')) {
+        var form = document.forms.formAve
+        const formData = await new FormData(form)
+        var nombreAve = formData.get('nombreAve')
+        var jornada = formData.get('jornada')
+        var tamano = formData.get('tamano')
+        var descripcionAve = formData.get('descripcionAve')
+        var url = formData.get('url')
+        await this.$apollo.mutate(
+          {
+            mutation: gql`
+              mutation UpdateAve($aveId: String!, $ave: AveUpdate) {
+                updateAve(aveId: $aveId, ave: $ave) {
+                  nombreAve
+                  nombreCientificoAve
+                  tamano
+                  tipoAve
+                  descripcion
+                  url
+                }
+              }
+            `,
+            variables: {
+              aveId: this.$route.params.id_ave,
+              ave: {
+                nombreAve: nombreAve,
+                tamano: Number(tamano),
+                tipoAve: jornada,
+                descripcion: descripcionAve,
+                url: url
+              }
+            }
+          }
+        ).then((result) => {
+          const message = 'Reserva del usuario realizada de manera exitosa.'
+          alert(message)
+          this.$emit('completedRegister')
+        })
+          .catch((error) => {
+            console.log(error)
+            if (error.message === '400: Bad Request') {
+              alert('Error. Fallo en el registro de reserva.')
+            }
+          })
+      }
+    }
+  }
 }
 </script>
 
