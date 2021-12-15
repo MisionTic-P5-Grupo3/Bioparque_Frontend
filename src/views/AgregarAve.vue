@@ -1,33 +1,33 @@
 <template>
   <div class="reservar">
     <h1>Reservar Visitas a la reserva de aves AVESMS</h1>
-    <form v-on:submit.prevent="agregarReserva" class="form" method="POST">
+    <form v-on:submit.prevent="agregarAve" class="form" method="POST">
       <div>
         <label>Nombre Ave</label>
-        <input type="text" placeholder="Escribe el nombre del ave" />
+        <input type="text" v-model="aveData.nombreAve" placeholder="Escribe el nombre del ave" />
       </div>
       <div>
         <label>Nombre Cientifico Ave</label>
-        <input type="text" placeholder="Escribe el nombre cientifico del ave" />
+        <input type="text" v-model="aveData.nombreCientificoAve" placeholder="Escribe el nombre cientifico del ave" />
       </div>
       <div>
         <label>Jornada</label>
-        <select type="text">
-         <option value="diurno">Diurno</option>
-         <option value="nocturno">Nocturno</option>
+        <select type="text" v-model="aveData.tipoAve">
+        <option value="diurno">Diurno</option>
+        <option value="nocturno">Nocturno</option>
         </select>
       </div>
       <div>
         <label>Tamaño (centimetros)</label>
-         <input type="number" placeholder="Escribe el tamaño promedop del ave en centimetros" />
+        <input type="number" v-model="aveData.tamano" placeholder="Escribe el tamaño promedop del ave en centimetros" />
       </div>
       <div>
         <label>Descripción Ave</label>
-        <input type="text" placeholder="Escribe la descripción del ave" />
+        <input type="text" v-model="aveData.descripcion" placeholder="Escribe la descripción del ave" />
       </div>
       <div>
         <label>Url Imagen Ave</label>
-        <input type="text" placeholder="Escribe la url con una imagen del ave" />
+        <input type="text"  v-model="aveData.url" placeholder="Escribe la url con una imagen del ave" />
       </div>
       <button type="submit" class="btn btn-form">Agregar Ave</button>
     </form>
@@ -40,49 +40,47 @@ export default {
   name: 'AgregarAve',
   data: function () {
     return {
-      reservaData: {
-        tipoDocumento: '',
-        numeroDocumento: null,
-        nombreCompleto: '',
-        telefono: '',
-        correoElectronico: '',
-        fecha: '2000-01-01',
-        idPlan: null
+      aveData: {
+        nombreAve: '',
+        nombreCientificoAve: '',
+        tamano: null,
+        tipoAve: '',
+        descripcion: '',
+        url: ''
       }
     }
   },
   methods: {
-    agregarReserva: async function () {
-      console.log(this.reservaData)
+    agregarAve: async function () {
+      console.log(this.aveData)
       await this.$apollo.mutate(
         {
           mutation: gql`
-            mutation CreateReserva($reserva: ReservaInput) {
-              createReserva(reserva: $reserva) {
-                tipo_documento
-                numero_documento
-                nombre_completo
-                telefono
-                correo_electronico
-                fecha
-                id_plan
+            mutation CreateAve($ave: AveInput!) {
+              createAve(ave: $ave) {
+                nombreAve
+                nombreCientificoAve
+                tamano
+                tipoAve
+                descripcion
+                url
+                }
               }
-            }
           `,
           variables: {
-            reserva: this.reservaData
+            ave: this.aveData
           }
         }
       )
         .then((result) => {
-          const message = `Reserva del usuario ${result.data.reservaData.nombre_completo} realizada de manera exitosa. `
+          const message = 'ave creada de manera exitosa.'
           alert(message)
           this.$emit('completedRegister')
         })
         .catch((error) => {
           console.log(error)
           if (error.message === '400: Bad Request') {
-            alert('Error. Fallo en el registro de reserva.')
+            alert('Error. Fallo en el registro de la Ave.')
           }
         })
     }
