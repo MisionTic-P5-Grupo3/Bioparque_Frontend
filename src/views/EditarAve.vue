@@ -13,8 +13,10 @@
       <div>
         <label>Jornada</label>
         <select type="text" name="jornada" v-model="getAveById.tipoAve">
-         <option value="diurno">Diurno</option>
-         <option value="nocturno">Nocturno</option>
+         <option value="Diurna">Diurna</option>
+         <option value="Nocturna">Nocturna</option>
+         <option value="Diurno">Diurno</option>
+         <option value="Nocturno">Nocturno</option>
         </select>
       </div>
       <div>
@@ -49,8 +51,9 @@ export default {
   apollo: {
     getAveById: {
       query: gql`
-        query GetAves($aveId: String!) {
+        query GetAveById($aveId: String!) {
           getAveById(aveId: $aveId) {
+            id
             nombreAve
             nombreCientificoAve
             tamano
@@ -72,6 +75,7 @@ export default {
       if (window.confirm('Seguro que deseas actualizar el ave?')) {
         var form = document.forms.formAve
         const formData = await new FormData(form)
+        var nombreCientificoAve = formData.get('nombreCientificoAve')
         var nombreAve = formData.get('nombreAve')
         var jornada = formData.get('jornada')
         var tamano = formData.get('tamano')
@@ -80,20 +84,22 @@ export default {
         await this.$apollo.mutate(
           {
             mutation: gql`
-              mutation UpdateAve($aveId: String!, $ave: AveUpdate) {
-                updateAve(aveId: $aveId, ave: $ave) {
-                  nombreAve
-                  nombreCientificoAve
-                  tamano
-                  tipoAve
-                  descripcion
-                  url
-                }
+             mutation UpdateAve($aveId: String!, $ave: AveUpdate) {
+              updateAve(aveId: $aveId, ave: $ave) {
+                id
+                nombreAve
+                nombreCientificoAve
+                tamano
+                tipoAve
+                descripcion
+                url
               }
+            }
             `,
             variables: {
               aveId: this.$route.params.id_ave,
               ave: {
+                nombreCientificoAve: nombreCientificoAve,
                 nombreAve: nombreAve,
                 tamano: Number(tamano),
                 tipoAve: jornada,

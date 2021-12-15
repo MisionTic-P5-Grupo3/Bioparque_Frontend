@@ -20,6 +20,7 @@
       <table>
         <tr class="encabezado_tabla">
           <th class="id_tabla">ID</th>
+          <th class="id_tabla">Nombre Cientifico</th>
           <th class="tipo_documento_tabla">Nombre del Ave</th>
           <th class="documento_tabla">Descripción</th>
           <th class="telefono_tabla">Jornada</th>
@@ -30,13 +31,14 @@
         </tr>
         <tr class="cuerpo_tabla" v-for="ave in results" :key="ave.nombreCientificoAve">
             <td>{{ ave.nombreCientificoAve }}</td>
+            <td>{{ ave.nombreCientificoAve }}</td>
             <td>{{ ave.nombreAve }}</td>
             <td>{{ ave.descripcion }}</td>
             <td>{{ ave.tipoAve }}</td>
             <td>{{ ave.tamano }}</td>
             <td>{{ ave.url}}</td>
-            <td><router-link :to="'/editarAve/'+ave.nombreCientificoAve"><button>Editar</button></router-link></td>
-            <td><button v-on:click="deleteAve(ave.nombreCientificoAve)">Eliminar</button></td>
+            <td><router-link :to="'/editarAve/'+ave.id"><button>Editar</button></router-link></td>
+            <td><button v-on:click="deleteAve(ave.id)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -61,6 +63,7 @@ export default {
       query: gql`
       query GetAves {
         getAves {
+          id
           nombreAve
           nombreCientificoAve
           tamano

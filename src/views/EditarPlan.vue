@@ -24,6 +24,11 @@
         <input
           v-model="getPlan.precio" name="precio" type="number" placeholder="Escribe el precio en pesos colombianos" />
       </div>
+      <div>
+        <label>URL</label>
+        <input
+          v-model="getPlan.url" name="url" type="text" placeholder="Escribe el precio en pesos colombianos" />
+      </div>
       <button type="submit" class="btn btn-form">Editar Plan Ahora</button>
     </form>
   </div>
@@ -37,7 +42,7 @@ export default {
     var url = JSON.parse(JSON.stringify(this.$route))
     var params = url.params
     return {
-      idRes: params.id_plan,
+      planId: params.id_plan,
       getPlan: []
     }
   },
@@ -51,10 +56,11 @@ export default {
             precio
             descripcion
             jornada
+            url
           }
         }`,
       variables () {
-        var planId = Number(this.$route.params.id_plan)
+        var planId = Number(this.planId)
         return {
           planId
         }
@@ -64,18 +70,19 @@ export default {
   methods: {
     actualizarPlan: async function (e) {
       if (window.confirm('Seguro que deseas actualizar el plan?')) {
+        console.log(Number(this.$route.params.id_plan))
         var form = document.forms.formPlan
         const formData = await new FormData(form)
-        var nombrePlan = formData.get('nombrePlan')
-        var jornada = formData.get('jornada')
-        var descripcion = formData.get('descripcion')
-        var precio = Number(formData.get('precio'))
-        var imagen = formData.get('imagen')
+        // var nombrePlan = formData.get('nombrePlan')
+        // var jornada = formData.get('jornada')
+        // var descripcion = formData.get('descripcion')
+        // var precio = Number(formData.get('precio'))
+        // var url = formData.get('url')
         await this.$apollo.mutate(
           {
             mutation: gql`
-              mutation UpdatePlan($plan: PlanUpdate) {
-                updatePlan(plan: $plan) {
+              mutation UpdatePlan($planId: Int!, $plan: PlanUpdate) {
+                updatePlan(planId: $planId, plan: $plan) {
                   id_plan
                   nombre_plan
                   precio
@@ -83,16 +90,15 @@ export default {
                   jornada
                   url
                 }
-              }
-            `,
+              }`,
             variables: {
-              idPlan: Number(this.$route.params.id_plan),
+              planId: Number(this.$route.params.id_plan),
               plan: {
-                nombre_plan: nombrePlan,
-                precio: precio,
-                descripcion: descripcion,
-                jornada: jornada,
-                url: imagen
+                nombre_plan: formData.get('nombrePlan'),
+                precio: Number(formData.get('precio')),
+                descripcion: formData.get('descripcion'),
+                jornada: formData.get('jornada'),
+                url: formData.get('url')
               }
             }
           }

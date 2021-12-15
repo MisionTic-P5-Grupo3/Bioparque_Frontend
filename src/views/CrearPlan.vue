@@ -1,16 +1,16 @@
 <template>
   <div class="crearPlan">
     <h1>Crear un Plan</h1>
-    <form v-on:submit.prevent="agregarPlan" class="form" method="POST">
+    <form v-on:submit.prevent="crearPlan" class="form" method="POST">
       <div>
         <label>Nombre del Plan</label>
-        <input v-model="planData.nombre" type="text" placeholder="Escribe el nombre del plan" />
+        <input v-model="planData.nombre_plan" type="text" placeholder="Escribe el nombre del plan" />
       </div>
       <div>
         <label>Jornada</label>
         <select v-model="planData.jornada" type="text">
-         <option value="Diurna">Diurna</option>
-         <option value="Nocturna">Nocturna</option>
+         <option value="Diurno">Diurna</option>
+         <option value="Nocturno">Nocturna</option>
         </select>
       </div>
       <div>
@@ -33,21 +33,51 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
 export default {
   name: 'CrearPlan',
   data: function () {
     return {
       planData: {
         jornada: '',
-        nombre: '',
+        nombre_plan: '',
         descripcion: '',
-        precio: ''
+        precio: 0,
+        url: ''
       }
     }
   },
   methods: {
-    agregarPlan: async function () {
+    crearPlan: async function () {
       console.log(this.planData)
+      await this.$apollo.mutate(
+        {
+          mutation: gql`
+            mutation CreatePlan($plan: PlanInput) {
+              createPlan(plan: $plan) {
+                nombre_plan
+                precio
+                descripcion
+                jornada
+                url
+              }
+            }
+          `,
+          variables: {
+            plan: this.planData
+          }
+        }
+      )
+        .then((result) => {
+          const message = 'Plan creado de manera exitosa.'
+          alert(message)
+        })
+        .catch((error) => {
+          console.log(error)
+          if (error.message === '400: Bad Request') {
+            alert('Error. Fallo en el registro de la Ave.')
+          }
+        })
     }
   }
 }
