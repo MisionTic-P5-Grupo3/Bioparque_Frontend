@@ -5,16 +5,14 @@
       <div class="tarjeta_ave" v-for="ave in getAves" :key="ave.nombreAve">
         <img
           class="ave_info"
-          src="https://okdiario.com/img/2019/09/17/-como-es-el-ave-del-paraiso_-1.jpg"
+          :src="ave.url"
         />
         <h5>Jornada: {{ ave.tipoAve }}</h5>
         <h5>Tamaño: {{ ave.tamano }}</h5>
         <h5>Nombre Cientifico: {{ ave.nombreCientificoAve }}</h5>
 
         <p class="descripcion">
-          Lorem ipsum dolor sit amet, consectetur adip prem ipsum dolor sit
-          amet, dolor sit amet, consectetur adip prem ipsum dolor sit amet,
-          consectetur adi ipsum dolor sit amet, consectetur adip.
+          {{ave.descripcion}}
         </p>
       </div>
     </div>
@@ -38,6 +36,8 @@ export default {
             nombreCientificoAve
             tamano
             tipoAve
+            descripcion
+            url
           }
         }
       `
