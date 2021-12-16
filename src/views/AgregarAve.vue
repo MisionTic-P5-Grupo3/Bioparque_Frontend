@@ -75,7 +75,8 @@ export default {
         .then((result) => {
           const message = 'ave creada de manera exitosa.'
           alert(message)
-          this.$emit('completedRegister')
+          location.push('/avesAdmin')
+          location.reload()
         })
         .catch((error) => {
           console.log(error)
