@@ -1,13 +1,5 @@
 # Bioparque_Frontend
-> Servicio web para reservar visitas en una reserva de aves.
-```
-Deployment con sesión cerrada: https://gallant-curie-fc1348.netlify.app/#/
-Deployment con sesión iniciada: https://wizardly-colden-f20765.netlify.app/#/
-```
-
-
-
-> Servicio web para reservar visitas en una reserva de aves.
+> Sitio web que permite al usuario reservar visitas a una Reserva Forestal y al administrador de la reserva le permite gestionar las reservas, gestionar los planes que deben haber en las reservas y también listar o modificar las aves que habitan la reserva.
 
 ## Project setup
 ```
